@@ -20,6 +20,7 @@ class ScholarshipPolicy:
     def decide(self, app: Application, score: float, model_version: str) -> Outcome:
         if not isfinite(score) or not 0 <= score <= 1:
             raise ValueError("model score must be finite and between 0 and 1")
+        reasons: tuple[str, ...]
         if app.missing_documents:
             decision = Decision.REVIEW
             reasons = ("MISSING_REQUIRED_DOCUMENTS",)
