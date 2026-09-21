@@ -1,0 +1,69 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rasheed-capstone"
+version = "1.0.0"
+description = "Explainable scholarship screening — SDA-AIE-113 capstone"
+requires-python = ">=3.11"
+dependencies = ["fastapi>=0.115,<1", "uvicorn>=0.30,<1", "pydantic-settings>=2.6,<3", "redis>=5,<7"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "pytest-cov>=5,<8", "httpx>=0.27,<1", "ruff>=0.9", "mypy>=1.14,<2", "import-linter>=2,<3"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers"
+markers = ["unit: isolated business logic", "integration: HTTP and lifecycle contracts", "behavioural: versioned production model", "slow: real model behaviour"]
+
+[tool.coverage.run]
+branch = true
+source = ["rasheed.domain", "rasheed.service", "rasheed.api"]
+
+[tool.coverage.report]
+fail_under = 80
+show_missing = true
+precision = 2
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["src"]
+
+[tool.importlinter]
+root_package = "rasheed"
+
+[[tool.importlinter.contracts]]
+name = "Domain has no outward dependencies"
+type = "forbidden"
+source_modules = ["rasheed.domain"]
+forbidden_modules = ["rasheed.service", "rasheed.adapters", "rasheed.api", "rasheed.config", "rasheed.bootstrap"]
+
+[[tool.importlinter.contracts]]
+name = "Service depends on domain and ports only"
+type = "forbidden"
+source_modules = ["rasheed.service"]
+forbidden_modules = ["rasheed.adapters", "rasheed.api", "rasheed.config", "rasheed.bootstrap"]
+
+[[tool.importlinter.contracts]]
+name = "API cannot instantiate adapters"
+type = "forbidden"
+source_modules = ["rasheed.api"]
+forbidden_modules = ["rasheed.adapters", "rasheed.bootstrap"]
+
+[[tool.importlinter.contracts]]
+name = "Adapters do not depend on the web layer"
+type = "forbidden"
+source_modules = ["rasheed.adapters"]
+forbidden_modules = ["rasheed.api", "rasheed.bootstrap"]
