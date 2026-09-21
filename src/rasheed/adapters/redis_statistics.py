@@ -1,7 +1,9 @@
 from typing import cast
 
 from redis import Redis
+from redis.backoff import NoBackoff
 from redis.exceptions import RedisError
+from redis.retry import Retry
 
 from rasheed.domain.entities import Decision
 from rasheed.service.interfaces import StoreUnavailable
@@ -11,7 +13,13 @@ class RedisStatistics:
     """Only aggregate counters are stored. No applicant inputs or identifiers."""
 
     def __init__(self, url: str, timeout: float):
-        self.client = Redis.from_url(url, socket_timeout=timeout, socket_connect_timeout=timeout)
+        # Bound dependency failure latency and never retry a possibly-applied increment.
+        self.client = Redis.from_url(
+            url,
+            socket_timeout=timeout,
+            socket_connect_timeout=timeout,
+            retry=Retry(NoBackoff(), 0),
+        )
         self.key = "rasheed:decision-counts:v1"
 
     def record(self, decision: Decision) -> None:

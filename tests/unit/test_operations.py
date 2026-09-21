@@ -89,7 +89,13 @@ def test_redis_adapter_records_only_aggregate_counts(monkeypatch):
             self.closed = True
 
     fake = FakeRedis()
-    monkeypatch.setattr("rasheed.adapters.redis_statistics.Redis.from_url", lambda *a, **kw: fake)
+
+    def factory(url, **kwargs):
+        assert kwargs["socket_timeout"] == kwargs["socket_connect_timeout"] == 1
+        assert kwargs["retry"].get_retries() == 0
+        return fake
+
+    monkeypatch.setattr("rasheed.adapters.redis_statistics.Redis.from_url", factory)
     adapter = RedisStatistics("redis://localhost", 1)
     adapter.record(Decision.ACCEPT)
     assert adapter.snapshot() == {"accept": 3, "review": 0, "reject": 0}
