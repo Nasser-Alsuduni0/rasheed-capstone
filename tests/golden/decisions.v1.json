@@ -1,0 +1,229 @@
+{
+  "model_sha256": "c2dc8fa3409ca7d4b23283dab21fbf3e55ee6eb9062862f2dbcc860420f88b2c",
+  "cases": [
+    {
+      "name": "maximum-merit-and-need",
+      "input": {
+        "gpa": 4,
+        "monthly_household_income_sar": 0,
+        "household_size": 1,
+        "transcript_present": true,
+        "income_proof_present": true
+      },
+      "expected": {
+        "decision": "accept",
+        "eligibility_score": 1,
+        "model_version": "rasheed-rules-1.0.0",
+        "policy_version": "scholarship-policy-1.0.0",
+        "reason_codes": [
+          "DOCUMENTS_COMPLETE",
+          "SCORE_MEETS_ACCEPTANCE"
+        ],
+        "explanation": "The complete application meets the demonstration eligibility policy.",
+        "next_steps": [
+          "Await the institution's verification and final award decision."
+        ],
+        "missing_documents": []
+      }
+    },
+    {
+      "name": "typical-accept",
+      "input": {
+        "gpa": 3.5,
+        "monthly_household_income_sar": 4000,
+        "household_size": 4,
+        "transcript_present": true,
+        "income_proof_present": true
+      },
+      "expected": {
+        "decision": "accept",
+        "eligibility_score": 0.84875,
+        "model_version": "rasheed-rules-1.0.0",
+        "policy_version": "scholarship-policy-1.0.0",
+        "reason_codes": [
+          "DOCUMENTS_COMPLETE",
+          "SCORE_MEETS_ACCEPTANCE"
+        ],
+        "explanation": "The complete application meets the demonstration eligibility policy.",
+        "next_steps": [
+          "Await the institution's verification and final award decision."
+        ],
+        "missing_documents": []
+      }
+    },
+    {
+      "name": "borderline-complete",
+      "input": {
+        "gpa": 2.5,
+        "monthly_household_income_sar": 8000,
+        "household_size": 2,
+        "transcript_present": true,
+        "income_proof_present": true
+      },
+      "expected": {
+        "decision": "review",
+        "eligibility_score": 0.47625,
+        "model_version": "rasheed-rules-1.0.0",
+        "policy_version": "scholarship-policy-1.0.0",
+        "reason_codes": [
+          "BORDERLINE_SCORE"
+        ],
+        "explanation": "The score falls within the committee review band.",
+        "next_steps": [
+          "A committee member must review the application."
+        ],
+        "missing_documents": []
+      }
+    },
+    {
+      "name": "minimum-gpa-no-need",
+      "input": {
+        "gpa": 2,
+        "monthly_household_income_sar": 25000,
+        "household_size": 5,
+        "transcript_present": true,
+        "income_proof_present": true
+      },
+      "expected": {
+        "decision": "reject",
+        "eligibility_score": 0.325,
+        "model_version": "rasheed-rules-1.0.0",
+        "policy_version": "scholarship-policy-1.0.0",
+        "reason_codes": [
+          "SCORE_BELOW_REVIEW_BAND"
+        ],
+        "explanation": "The score is below this demonstration policy's review band.",
+        "next_steps": [
+          "Request a committee review if application information is incorrect."
+        ],
+        "missing_documents": []
+      }
+    },
+    {
+      "name": "minimum-gpa-high-need",
+      "input": {
+        "gpa": 2,
+        "monthly_household_income_sar": 0,
+        "household_size": 1,
+        "transcript_present": true,
+        "income_proof_present": true
+      },
+      "expected": {
+        "decision": "review",
+        "eligibility_score": 0.675,
+        "model_version": "rasheed-rules-1.0.0",
+        "policy_version": "scholarship-policy-1.0.0",
+        "reason_codes": [
+          "BORDERLINE_SCORE"
+        ],
+        "explanation": "The score falls within the committee review band.",
+        "next_steps": [
+          "A committee member must review the application."
+        ],
+        "missing_documents": []
+      }
+    },
+    {
+      "name": "maximum-income",
+      "input": {
+        "gpa": 4,
+        "monthly_household_income_sar": 1000000,
+        "household_size": 1,
+        "transcript_present": true,
+        "income_proof_present": true
+      },
+      "expected": {
+        "decision": "review",
+        "eligibility_score": 0.65,
+        "model_version": "rasheed-rules-1.0.0",
+        "policy_version": "scholarship-policy-1.0.0",
+        "reason_codes": [
+          "BORDERLINE_SCORE"
+        ],
+        "explanation": "The score falls within the committee review band.",
+        "next_steps": [
+          "A committee member must review the application."
+        ],
+        "missing_documents": []
+      }
+    },
+    {
+      "name": "low-gpa-explained",
+      "input": {
+        "gpa": 1.9,
+        "monthly_household_income_sar": 0,
+        "household_size": 1,
+        "transcript_present": true,
+        "income_proof_present": true
+      },
+      "expected": {
+        "decision": "reject",
+        "eligibility_score": 0.65875,
+        "model_version": "rasheed-rules-1.0.0",
+        "policy_version": "scholarship-policy-1.0.0",
+        "reason_codes": [
+          "GPA_BELOW_MINIMUM"
+        ],
+        "explanation": "The GPA is below this demonstration scholarship's minimum.",
+        "next_steps": [
+          "Request a committee review if the GPA record is incorrect."
+        ],
+        "missing_documents": []
+      }
+    },
+    {
+      "name": "missing-documents-override-rejection",
+      "input": {
+        "gpa": 0,
+        "monthly_household_income_sar": 0,
+        "household_size": 1,
+        "transcript_present": false,
+        "income_proof_present": false
+      },
+      "expected": {
+        "decision": "review",
+        "eligibility_score": 0.35,
+        "model_version": "rasheed-rules-1.0.0",
+        "policy_version": "scholarship-policy-1.0.0",
+        "reason_codes": [
+          "MISSING_REQUIRED_DOCUMENTS"
+        ],
+        "explanation": "Committee review is required because the application is incomplete.",
+        "next_steps": [
+          "Submit transcript.",
+          "Submit income proof."
+        ],
+        "missing_documents": [
+          "transcript",
+          "income_proof"
+        ]
+      }
+    },
+    {
+      "name": "missing-transcript-override-acceptance",
+      "input": {
+        "gpa": 4,
+        "monthly_household_income_sar": 0,
+        "household_size": 1,
+        "transcript_present": false,
+        "income_proof_present": true
+      },
+      "expected": {
+        "decision": "review",
+        "eligibility_score": 1,
+        "model_version": "rasheed-rules-1.0.0",
+        "policy_version": "scholarship-policy-1.0.0",
+        "reason_codes": [
+          "MISSING_REQUIRED_DOCUMENTS"
+        ],
+        "explanation": "Committee review is required because the application is incomplete.",
+        "next_steps": [
+          "Submit transcript."
+        ],
+        "missing_documents": [
+          "transcript"
+        ]
+      }
+    }
+  ]
+}
