@@ -33,11 +33,11 @@ cases; scores are guidance and humans remain responsible for final awards.
 Redis provides an actual supporting service for aggregate decision counters.
 Only three counters are stored; no per-applicant records or deduplication keys.
 Readiness depends on Redis; liveness does not. If counting fails, the API returns
-503 instead of pretending the complete operation succeeded. Trade-off: availability
+503 instead of pretending the complete operation succeeded. Failure latency
 is bounded by socket and Compose DNS timeouts; automatic Redis retries are disabled
 so an increment is not silently replayed after an ambiguous connection failure.
-Availability
-is coupled to Redis, counters are ephemeral, and retries can count an application
+Trade-off: availability is coupled to Redis, counters are ephemeral, and client
+retries can count an application
 twice. Durable, exactly-once accounting would require a different data model and
 idempotency design, which the demo does not claim to provide.
 

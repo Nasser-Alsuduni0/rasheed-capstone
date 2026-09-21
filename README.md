@@ -9,6 +9,9 @@ The policy is illustrative, not an institution's admissions standard.
 [Decisions](DECISIONS.md) · [Measured benchmarks](BENCHMARKS.md) ·
 [Five-minute demo](DEMO.md) · [Acceptance checklist](ACCEPTANCE.md)
 
+The [verified initial release](RELEASE.md) includes a green CI run, full-SHA image
+tag, and registry digest; its image was successfully pulled without credentials.
+
 ## Run in under ten minutes
 
 Prerequisites: Git and running Docker Desktop with Linux containers and Compose v2.
