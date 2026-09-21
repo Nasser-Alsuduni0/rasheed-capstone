@@ -1,0 +1,6 @@
+{
+  "version": "rasheed-rules-1.0.0",
+  "merit_weight": 0.65,
+  "need_weight": 0.35,
+  "income_per_person_ceiling_sar": 5000
+}
