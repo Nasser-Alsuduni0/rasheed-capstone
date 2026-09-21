@@ -1,0 +1,9 @@
+*
+!requirements.lock
+!src/
+!src/**
+!models/
+!models/**
+**/__pycache__/
+**/*.pyc
+**/*.egg-info/
