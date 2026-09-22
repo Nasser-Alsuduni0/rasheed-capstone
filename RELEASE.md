@@ -3,7 +3,7 @@
 Published from main on 22 September 2026 (Asia/Riyadh):
 
 - Commit: `d4e36c44535ed09bc14bc2c1acb2078a2d0555b4`
-- [Green CI run](https://github.com/Nasser-Alsuduni0/rasheed-capstone/actions/runs/35659835859)
+- [Green CI run](https://github.com/Nasser-Alsuduni0/rasheed-NasserAlsuduni-SDA-AIE-113/actions/runs/35659835859)
 - Image: `ghcr.io/nasser-alsuduni0/rasheed-capstone:d4e36c44535ed09bc14bc2c1acb2078a2d0555b4`
 - Digest: `sha256:dd8f0881331bff9e18f7fb2a52ada8bd30766ad8f9b2865c5839c1a9b6b7f57e`
 

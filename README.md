@@ -3,7 +3,7 @@
 My SDA-AIE-113 capstone project: a scholarship-screening API that gives an
 applicant a clear result and explains what to do next.
 
-[![CI](https://github.com/Nasser-Alsuduni0/rasheed-capstone/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Nasser-Alsuduni0/rasheed-capstone/actions/workflows/ci.yml)
+[![CI](https://github.com/Nasser-Alsuduni0/rasheed-NasserAlsuduni-SDA-AIE-113/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Nasser-Alsuduni0/rasheed-NasserAlsuduni-SDA-AIE-113/actions/workflows/ci.yml)
 
 Rasheed takes GPA, household income, household size, and two document-completeness
 flags. It returns **accept**, **review**, or **reject**, along with the score,
@@ -15,7 +15,7 @@ validation, useful explanations, tests, Docker, and a working delivery pipeline.
 The scoring rules are deliberately small and inspectable. This is **not a trained
 ML model**, and the sample policy is not an official scholarship standard.
 
-[CI](https://github.com/Nasser-Alsuduni0/rasheed-capstone/actions/workflows/ci.yml) ·
+[CI](https://github.com/Nasser-Alsuduni0/rasheed-NasserAlsuduni-SDA-AIE-113/actions/workflows/ci.yml) ·
 [Decisions](DECISIONS.md) · [Measured benchmarks](BENCHMARKS.md) ·
 [Five-minute demo](DEMO.md) · [Acceptance checklist](ACCEPTANCE.md)
 
@@ -38,7 +38,7 @@ are upstream Starlette/httpx and AnyIO deprecations; they are retained in the re
 ![Healthy Docker services, non-root user, successful smoke checks and CI](docs/evidence/runtime-results.svg)
 
 [Read the runtime and CI output](docs/evidence/runtime-and-ci.txt) ·
-[Inspect the green GitHub Actions run](https://github.com/Nasser-Alsuduni0/rasheed-capstone/actions/runs/35660268263)
+[Inspect the green GitHub Actions run](https://github.com/Nasser-Alsuduni0/rasheed-NasserAlsuduni-SDA-AIE-113/actions/runs/35660268263)
 
 The tests cover three levels:
 
@@ -63,8 +63,8 @@ The first run downloads images and packages; network speed affects elapsed time.
 No Python installation, API key, or external AI service is needed to start the stack.
 
 ```sh
-git clone https://github.com/Nasser-Alsuduni0/rasheed-capstone.git
-cd rasheed-capstone
+git clone https://github.com/Nasser-Alsuduni0/rasheed-NasserAlsuduni-SDA-AIE-113.git
+cd rasheed-NasserAlsuduni-SDA-AIE-113
 docker compose up --build --detach --wait
 docker compose ps
 ```
@@ -267,7 +267,7 @@ For a release, copy the full SHA-tagged image reference from the successful
 Actions publish summary. On PowerShell:
 
 ```powershell
-$env:RASHEED_IMAGE = "ghcr.io/nasser-alsuduni0/rasheed-capstone:FULL_COMMIT_SHA"
+$env:RASHEED_IMAGE = "ghcr.io/nasser-alsuduni0/rasheed-nasseralsuduni-sda-aie-113:FULL_COMMIT_SHA"
 docker compose pull
 docker compose up --detach --no-build --wait
 ```
