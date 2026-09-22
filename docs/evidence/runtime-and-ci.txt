@@ -1,0 +1,13 @@
+Rasheed verification | 2026-09-22
+Commands:
+docker compose ps --format '{{.Service}} | {{.Status}}'
+docker compose exec -T rasheed-api id
+python scripts/smoke.py
+gh run view 35660268263 --json conclusion,headSha,url,jobs
+
+Captured output:
+feature-cache | Up 5 hours (healthy)
+rasheed-api | Up 5 hours (healthy)
+uid=10001(appuser) gid=10001(appuser) groups=10001(appuser)
+SMOKE_OK: valid prediction, health, readiness, statistics, 43 malformed files
+{"conclusion":"success","headSha":"51d417c5605c33114ccee31409a1613b5f2175d5","jobs":[{"conclusion":"success","name":"secrets"},{"conclusion":"success","name":"lint"},{"conclusion":"success","name":"test"},{"conclusion":"success","name":"image-smoke"},{"conclusion":"success","name":"publish"}],"url":"https://github.com/Nasser-Alsuduni0/rasheed-capstone/actions/runs/35660268263"}

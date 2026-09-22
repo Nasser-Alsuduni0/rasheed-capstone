@@ -25,9 +25,9 @@ suitable for real scholarship decisions.
 | Ten-minute reproduction and five-minute presentation | README.md; DEMO.md |
 | Real numbers and five decisions | BENCHMARKS.md; DECISIONS.md |
 
-Public repository: https://github.com/Nasser-Alsuduni0/rasheed-capstone
+Public repository: https://github.com/Nasser-Alsuduni0/rasheed-NasserAlsuduni-SDA-AIE-113
 
-CI evidence: https://github.com/Nasser-Alsuduni0/rasheed-capstone/actions/workflows/ci.yml
+CI evidence: https://github.com/Nasser-Alsuduni0/rasheed-NasserAlsuduni-SDA-AIE-113/actions/workflows/ci.yml
 
 The initial bootstrap is committed and pushed by the owner before enabling branch
 protection. Subsequent main changes must go through reviewed, passing pull

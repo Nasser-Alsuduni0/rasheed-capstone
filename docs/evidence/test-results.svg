@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="384" viewBox="0 0 1200 384" role="img" aria-label="111 tests passed">
+<rect width="100%" height="100%" rx="20" fill="#101b2b"/>
+<rect x="0" y="0" width="8" height="100%" fill="#2dd4bf"/>
+<text x="42" y="57" font-family="Segoe UI,Arial,sans-serif" font-size="29" font-weight="700" fill="#f1f5f9">111 tests passed</text>
+<text x="42" y="94" font-family="Segoe UI,Arial,sans-serif" font-size="17" fill="#a8b8cc">Actual local run · 22 September 2026 · Python 3.12.13 · revision 51d417c</text>
+<text x="42" y="145" font-family="Consolas,monospace" font-size="19" fill="#e2e8f0">$ python -m pytest --cov --cov-report=term-missing -q</text>
+<text x="42" y="179" font-family="Consolas,monospace" font-size="19" fill="#e2e8f0">Scope                  Statements   Branches   Coverage</text>
+<text x="42" y="213" font-family="Consolas,monospace" font-size="19" fill="#e2e8f0">domain / service / api       234         28     100.00%</text>
+<text x="42" y="247" font-family="Consolas,monospace" font-size="19" fill="#e2e8f0">Required test coverage of 80.0% reached.</text>
+<text x="42" y="281" font-family="Consolas,monospace" font-size="19" fill="#e2e8f0">111 passed, 2 warnings in 6.60s</text>
+<text x="42" y="315" font-family="Consolas,monospace" font-size="19" fill="#5eead4">Report excerpt · original output linked below</text>
+</svg>

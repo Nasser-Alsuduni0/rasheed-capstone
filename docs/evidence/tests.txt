@@ -1,0 +1,34 @@
+Rasheed verification | 2026-09-22
+Application revision: 51d417c5605c33114ccee31409a1613b5f2175d5
+Command: python -m pytest --cov --cov-report=term-missing -q
+Exit code: 0
+Captured report (progress dots omitted):
+
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\user\Documents\rasheed-capstone\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+.venv\Lib\site-packages\starlette\testclient.py:53
+  C:\Users\user\Documents\rasheed-capstone\.venv\Lib\site-packages\starlette\testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=============================== tests coverage ================================
+______________ coverage: platform win32, python 3.12.13-final-0 _______________
+
+Name                                Stmts   Miss Branch BrPart    Cover   Missing
+---------------------------------------------------------------------------------
+src\rasheed\api\__init__.py             0      0      0      0  100.00%
+src\rasheed\api\app.py                 86      0      6      0  100.00%
+src\rasheed\api\schemas.py             42      0      0      0  100.00%
+src\rasheed\domain\__init__.py          0      0      0      0  100.00%
+src\rasheed\domain\entities.py         39      0      8      0  100.00%
+src\rasheed\domain\policy.py           42      0     14      0  100.00%
+src\rasheed\service\__init__.py         0      0      0      0  100.00%
+src\rasheed\service\interfaces.py       5      0      0      0  100.00%
+src\rasheed\service\screening.py       20      0      0      0  100.00%
+---------------------------------------------------------------------------------
+TOTAL                                 234      0     28      0  100.00%
+Required test coverage of 80.0% reached. Total coverage: 100.00%
+111 passed, 2 warnings in 6.60s

@@ -64,7 +64,7 @@ CI uploads its own coverage artifact; it does not substitute local timings.
 
 ## Remote CI cross-check
 
-[Initial green main run 35659835859](https://github.com/Nasser-Alsuduni0/rasheed-capstone/actions/runs/35659835859)
+[Initial green main run 35659835859](https://github.com/Nasser-Alsuduni0/rasheed-NasserAlsuduni-SDA-AIE-113/actions/runs/35659835859)
 on a GitHub-hosted Ubuntu runner measured the fast gate at **3.722 s wall time**
 (90 passed in 1.45 s, 99.62% core branch-aware coverage). The slow suite passed
 21 tests in 0.09 s. All 43 malformed live requests, real Redis outage/recovery,
