@@ -1,9 +1,19 @@
 # Rasheed | راشد
 
-A scholarship-screening API built for the SDA-AIE-113 capstone.
-It returns **accept**, **review**, or **reject**, with an explanation and actionable next steps.
-It uses a small, versioned, transparent scoring artifact—not a trained classifier.
-The policy is illustrative, not an institution's admissions standard.
+My SDA-AIE-113 capstone project: a scholarship-screening API that gives an
+applicant a clear result and explains what to do next.
+
+[![CI](https://github.com/Nasser-Alsuduni0/rasheed-capstone/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Nasser-Alsuduni0/rasheed-capstone/actions/workflows/ci.yml)
+
+Rasheed takes GPA, household income, household size, and two document-completeness
+flags. It returns **accept**, **review**, or **reject**, along with the score,
+reasons, and next steps. For example, a strong application with missing income
+proof goes to review instead of receiving a final decision.
+
+The focus of this project is the whole service: clear business rules, strict input
+validation, useful explanations, tests, Docker, and a working delivery pipeline.
+The scoring rules are deliberately small and inspectable. This is **not a trained
+ML model**, and the sample policy is not an official scholarship standard.
 
 [CI](https://github.com/Nasser-Alsuduni0/rasheed-capstone/actions/workflows/ci.yml) ·
 [Decisions](DECISIONS.md) · [Measured benchmarks](BENCHMARKS.md) ·
@@ -12,7 +22,41 @@ The policy is illustrative, not an institution's admissions standard.
 The [verified initial release](RELEASE.md) includes a green CI run, full-SHA image
 tag, and registry digest; its image was successfully pulled without credentials.
 
-## Run in under ten minutes
+## Test evidence
+
+These are rendered excerpts of real command output, **not terminal screenshots**.
+The text reports are included so the results can be checked rather than relying
+on an image. The local checks were rerun on 22 September 2026 against application
+revision `51d417c`; timings are observations, not guarantees.
+
+![Pytest report: 111 passed, 100 percent branch-aware core coverage](docs/evidence/test-results.svg)
+
+[Read the captured test report](docs/evidence/tests.txt). Coverage is for
+`domain`, `service`, and `api`, not every file in the repository. The two warnings
+are upstream Starlette/httpx and AnyIO deprecations; they are retained in the report.
+
+![Healthy Docker services, non-root user, successful smoke checks and CI](docs/evidence/runtime-results.svg)
+
+[Read the runtime and CI output](docs/evidence/runtime-and-ci.txt) ·
+[Inspect the green GitHub Actions run](https://github.com/Nasser-Alsuduni0/rasheed-capstone/actions/runs/35660268263)
+
+The tests cover three levels:
+
+- **Unit:** score thresholds, domain validation, configuration, and adapter behavior.
+- **Integration:** the real HTTP interface with fake dependencies, including safe
+  errors and all 43 malformed payload files.
+- **Behavioural:** the real versioned scoring artifact, full golden decisions,
+  and checks that income/GPA changes move results in the expected direction.
+
+The Docker checks also exercise the actual Redis service. If Redis stops,
+liveness stays at 200 while readiness returns 503. Shutdown must finish cleanup,
+and the API must run as `appuser`, not root.
+
+For build time, image size, startup time, and load-test measurements, see
+[BENCHMARKS.md](BENCHMARKS.md). To repeat the checks, follow the
+[developer workflow](#developer-workflow) below.
+
+## Run it locally
 
 Prerequisites: Git and running Docker Desktop with Linux containers and Compose v2.
 The first run downloads images and packages; network speed affects elapsed time.
@@ -88,22 +132,69 @@ tests—not unique students. There is no applicant database or idempotency promi
 
 ## Architecture
 
-```text
-HTTP schemas → domain Application → ScreeningService → Outcome → HTTP response
-                                      │       │
-                                ScoringModel  DecisionStatistics  (Protocols)
-                                      │       │
-                              JSON RuleModel  RedisStatistics     (adapters)
+The API handles HTTP, the service coordinates screening, and the domain owns the
+scholarship rules. Model loading and Redis access stay in adapters, behind Python
+Protocols, so the business logic does not depend on either implementation.
+
+```mermaid
+flowchart LR
+    Client["Client / Swagger UI"] -->|HTTP / JSON| Api
+
+    subgraph Solution["Rasheed API — Clean Architecture"]
+        Api["API<br/>FastAPI routes · Strict schemas<br/>Trace IDs · Safe error responses"]
+        Service["Service<br/>ScreeningService<br/>Coordinate score, decision and count"]
+        Domain["Domain<br/>Application · Outcome<br/>ScholarshipPolicy · Decision rules"]
+        Ports["Service interfaces<br/>ScoringModel<br/>DecisionStatistics"]
+        Model["Model adapter<br/>RuleModel<br/>Versioned scoring rules"]
+        Statistics["Statistics adapter<br/>RedisStatistics<br/>Aggregate decision counts"]
+
+        Api -->|calls| Service
+        Api -->|maps request to| Domain
+        Service -->|applies policy| Domain
+        Service -->|depends on| Ports
+        Model -.->|implements ScoringModel| Ports
+        Statistics -.->|implements DecisionStatistics| Ports
+    end
+
+    Model -->|loads at startup| Artifact["JSON model artifact<br/>scholarship_rules.v1.json"]
+    Statistics -->|increment / read / ping| Redis[("Redis<br/>feature-cache")]
+
+    classDef client fill:#f1f5f9,stroke:#64748b,color:#0f172a
+    classDef api fill:#dbeafe,stroke:#2563eb,color:#172554
+    classDef core fill:#dcfce7,stroke:#16a34a,color:#14532d
+    classDef port fill:#f3e8ff,stroke:#9333ea,color:#581c87
+    classDef adapter fill:#ffedd5,stroke:#ea580c,color:#7c2d12
+    classDef external fill:#f1f5f9,stroke:#64748b,color:#0f172a
+
+    class Client client
+    class Api api
+    class Service,Domain core
+    class Ports port
+    class Model,Statistics adapter
+    class Artifact,Redis external
 ```
 
-`src/rasheed/bootstrap.py` is the composition root. Importing it performs no
-model load or network connection. Lifespan startup constructs typed settings,
-loads and validates the model once per worker, warms it up, checks Redis, and
-then exposes readiness. Shutdown closes the Redis client.
+Solid arrows show calls, dependencies, or resource access. Dashed arrows show
+which Protocol each adapter implements; the service does **not** import the
+concrete adapters. Responses return through the API in the same
+`{data, error, trace_id}` envelope.
 
-Domain code has no framework imports. Service depends on domain and Protocols.
-HTTP schemas do not become domain entities. Four executable import-linter
-contracts protect these boundaries; fake adapters power fast integration tests.
+| Layer | Responsibility | Code |
+| --- | --- | --- |
+| API | Validate requests, map them to domain objects, and format responses | [api/](src/rasheed/api/) |
+| Service | Coordinate scoring, policy evaluation, and statistics through Protocols | [service/](src/rasheed/service/) |
+| Domain | Define application data, decision thresholds, reasons, and next steps | [domain/](src/rasheed/domain/) |
+| Adapters | Load the scoring artifact and communicate with Redis | [adapters/](src/rasheed/adapters/) |
+
+**Startup and shutdown.** [bootstrap.py](src/rasheed/bootstrap.py) wires the
+concrete adapters into the service. Importing it performs no model load or network
+connection. FastAPI's lifespan loads settings and the model, warms the service up,
+checks Redis, and only then exposes readiness. Shutdown closes the Redis client.
+
+**Keeping the boundaries intact.** Domain code has no framework imports, and HTTP
+schemas do not become domain entities. Four import-linter contracts enforce the
+layer boundaries. Integration tests swap in fake adapters; behavioural tests use
+the real scoring artifact.
 
 ## Developer workflow
 
@@ -198,3 +289,12 @@ SHA/digest and rerunning the same commands.
   lifespan cleanup; operational checks require `service_stopped` and no OOM.
   Exit 137 is not normal—investigate memory limits.
 - Golden test failure: inspect the policy change; do not blindly rewrite expected files.
+
+## Acknowledgments
+
+This project was completed as part of the SDA-AIE-113 — Software Engineering Practices for AI Systems training program at SDAIA Academy, under the supervision of Abdullah Khalid AlShahrani.
+
+The portfolio demonstrates the practical application of software engineering practices for AI systems — building a production-style AI/ML service through clean architecture, a well-defined API contract, containerization, a layered automated testing suite, a CI/CD pipeline with branch protection, and safe configuration, secrets, and logging management.
+
+Official SDAIA Academy GitHub:
+[https://github.com/SDAIAAcademy](https://github.com/SDAIAAcademy)

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="418" viewBox="0 0 1200 418" role="img" aria-label="Running stack + remote CI">
+<rect width="100%" height="100%" rx="20" fill="#101b2b"/>
+<rect x="0" y="0" width="8" height="100%" fill="#2dd4bf"/>
+<text x="42" y="57" font-family="Segoe UI,Arial,sans-serif" font-size="29" font-weight="700" fill="#f1f5f9">Running stack + remote CI</text>
+<text x="42" y="94" font-family="Segoe UI,Arial,sans-serif" font-size="17" fill="#a8b8cc">Actual command output · 22 September 2026 · CI run 35660268263</text>
+<text x="42" y="145" font-family="Consolas,monospace" font-size="19" fill="#e2e8f0">feature-cache | Up 5 hours (healthy)</text>
+<text x="42" y="179" font-family="Consolas,monospace" font-size="19" fill="#e2e8f0">rasheed-api   | Up 5 hours (healthy)</text>
+<text x="42" y="213" font-family="Consolas,monospace" font-size="19" fill="#e2e8f0">uid=10001(appuser) gid=10001(appuser) groups=10001(appuser)</text>
+<text x="42" y="247" font-family="Consolas,monospace" font-size="19" fill="#e2e8f0">SMOKE_OK: valid prediction, health, readiness, statistics,</text>
+<text x="42" y="281" font-family="Consolas,monospace" font-size="19" fill="#e2e8f0">          43 malformed files</text>
+<text x="42" y="315" font-family="Consolas,monospace" font-size="19" fill="#e2e8f0">GitHub: lint / secrets / test / image-smoke / publish = success</text>
+<text x="42" y="349" font-family="Consolas,monospace" font-size="19" fill="#5eead4">Report excerpt · original output and CI run linked below</text>
+</svg>
